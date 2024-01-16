@@ -167,7 +167,7 @@ For a visual guide on how to publish and share your game mode, watch our [YouTub
 - **Modification Note**: Any changes made to these modes and modules will be ignored as they are part of the provided environment.
 
 ### Port Forwarding & Local Multiplayer Testing
-- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#) [COMING SOON].
+- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#) <sub>[COMING SOON] </sub>.
 
 ### Matchmaking with a Refiner Code
 - **Publishing Modes**: Upon publishing a mode, a refiner key is generated.
