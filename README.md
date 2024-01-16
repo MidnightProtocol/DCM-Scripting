@@ -4,7 +4,7 @@
 
 To get started with DEADROP's DCM Scripting, ensure you have the following requirements set up on your system:
 
-1. **Visual Studio Code**: This is the primary and recommended IDE used for development. Download and install it from [here](https://code.visualstudio.com/).
+1. **Visual Studio Code**: This is the primary and required, if using the `MSLD`Extension, IDE used for development. Download and install it from [here](https://code.visualstudio.com/).
 
 2. **Enable 'Allow Breakpoints Everywhere'**: 
     - Open Visual Studio Code.
@@ -15,7 +15,7 @@ To get started with DEADROP's DCM Scripting, ensure you have the following requi
     - This extension provides enhanced language support for Luau.
     - Install it from the Visual Studio Marketplace: [Luau Language Server](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp).
 
-4. **Midnight Luau Debugger Extension**: 
+4. **Midnight Society Luau Debugger (MSLD) Extension**: 
     - Required for debugging DCM Luau scripts in Visual Studio Code.
     - Install it from the Visual Studio Marketplace: [Midnight Luau Debugger](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp).
 -----
@@ -62,7 +62,7 @@ Follow these steps to set up your first project with DEADROP's DCM Scripting:
     }
     ```
 
-    - Change the `map` value to `"Canyon"` as required for your setup.
+    - Change the `map` value to `"Canyon"` or as required for your setup.
 
 
 -----
@@ -71,7 +71,7 @@ Follow these steps to set up your first project with DEADROP's DCM Scripting:
 Creating a basic game mode in DEADROP's DCM Scripting involves a few simple steps:
 
 1. **Prepare the UserModes Folder**:
-    - Ensure you have previously created a `UserModes` folder as instructed in the [Creating Your First Project](##creating-your-first-project) section.
+    - Ensure you have previously created a `UserModes` folder as instructed in the [Creating Your First Project](#creating-your-first-project) section.
 
 2. **Create the MyUserMode.luau File**:
     - Inside the `UserModes` folder, create a new file named `MyUserMode.luau`.
