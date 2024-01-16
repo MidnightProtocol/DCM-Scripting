@@ -1,93 +1,185 @@
-# SCRIPTING IN CREATIVE MODE
+# Scripting in Deadrop Creative Mode
+-----
+## Initial Setup
 
-Hello Creators, Ryan Petrie (aka bob42) here. I lead the core tech team here at Midnight Society, and our team has been developing the scripting system powering DEADROP Creator Modes in Snapshot VII. Today I want to introduce you to that scripting system and help you prepare to script your own game modes within DEADROP.
+To get started with DEADROP's DCM Scripting, ensure you have the following requirements set up on your system:
 
-What you see in Snapshot VII may look like the custom game mode feature you’ve seen in other games, with menus to change game rules and parameters. But that’s just the tip of the iceberg. For each game mode, there is a backing script that controls the flow and logic of the game. And from the ground up, we’ve designed it to be used by you—the DEADROP community—to make whatever game mode you can imagine.
+1. **Visual Studio Code**: This is the primary and recommended IDE used for development. Download and install it from [here](https://code.visualstudio.com/).
 
-## Designed for Creators
-When we were planning Snapshot VII, we picked several game modes that we should implement to prove out the scripting system and to drive its feature set. At no point were we focused on just delivering game modes; they were always a means to an end. What we’re really delivering is the capability built into DEADROP to make any game that can be dreamed up with DEADROP’s systems. When scripting, you’ll have access to the core systems that make up the Vertical Extraction Shooter: movement, weapons, damage, respawns, tuning, teams, and more. We’ve also implemented systems just for Creator Modes, like HUD control and messaging, scoreboards, and game rounds, with more features to come.
+2. **Enable 'Allow Breakpoints Everywhere'**: 
+    - Open Visual Studio Code.
+    - Go to `Settings`.
+    - Search for `Debug: Allow Breakpoints Everywhere` and enable this setting.
 
-To illustrate the power that comes from this, look to the variety of game modes shipped in this snapshot. All the Creator Modes built into Snapshot VII are implemented entirely in script. There is no code in the DEADROP codebase that even mentions Capture the Flag or Team Deathmatch, for example. The scoring rules, loadouts on spawn, team assignment, detecting when a flag is captured, the HUD messages – all of that logic is written in script.
+3. **LUAU Language Server Extension**: 
+    - This extension provides enhanced language support for Luau.
+    - Install it from the Visual Studio Marketplace: [Luau Language Server](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp).
 
-## Technical Details
-We use Lua (specifically Luau, a hardened and battle-tested variant of Lua) as our scripting backend. Lua is a popular choice for scripting languages, and resources for learning Lua are readily available. Script code executes on the server, which authoritatively controls all game logic.
+4. **Midnight Luau Debugger Extension**: 
+    - Required for debugging DCM Luau scripts in Visual Studio Code.
+    - Install it from the Visual Studio Marketplace: [Midnight Luau Debugger](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp).
+-----
+## Creating Your First Project
 
-We’ve built an API (a set of objects, functions and data) on top of Lua to expose functionality to scripts, in two layers. The lower layer is the direct access to our C++ engine and game code, where function calls in the script directly execute native code. The higher layer is written in Lua and implements utilities or higher-level functionality, like health regeneration or outfit management.
+Follow these steps to set up your first project with DEADROP's DCM Scripting:
+
+1. **Create an Empty Folder**: 
+    - Choose a location on your computer for your project.
+
+2. **Create Required Folders**: 
+    - Open the newly created folder.
+    - Inside, create a folder named `.vscode`.
+    - Also, create folders named `UserModes` and `UserModules`.
+
+3. **Set Up launch.json File**: 
+    - In the `.vscode` folder, create a new file named `launch.json`.
+    - Leave this file empty for now. 
+    
+    
+   <sub> **Note**: If you are unable to change the file extension, you may need to adjust your system settings to show file extensions.</sub>
+
+4. **Open the Project in Visual Studio Code**: 
+    - Open Visual Studio Code.
+    - Navigate to `File > Open Folder` and select your project folder.
+
+5. **Configure launch.json for Debugging**: 
+    - With your project open in Visual Studio Code, navigate to the `launch.json` file.
+    - Add the following Midnight Luau Debugger default configuration:
+
+    ```json
+    {
+        "configurations": [
+            {
+                "type": "msld",
+                "request": "attach",
+                "name": "Midnight Debug",
+                "host": "127.0.0.1",
+                "port": 21110,
+                "sourceRoot": "${workspaceFolder}",
+                "map": "Canyon"
+            }
+        ]
+    }
+    ```
+
+    - Change the `map` value to `"Canyon"` as required for your setup.
 
 
-Game scripts are authored locally on your computer. When they’re ready to be tested, they’re uploaded to our backend via the Upload Script button in the Creative tab of the lobby menu. From there, our game servers pull down the script when a game instance of that Refiner Code is created and matchmade into. Game scripts only run on the game servers, but we’re developing tools to make inspecting and debugging your script possible. We’ll have more information on that later.
+-----
+## Making your Mode
+
+Creating a basic game mode in DEADROP's DCM Scripting involves a few simple steps:
+
+1. **Prepare the UserModes Folder**:
+    - Ensure you have previously created a `UserModes` folder as instructed in the [Creating Your First Project](##creating-your-first-project) section.
+
+2. **Create the MyUserMode.luau File**:
+    - Inside the `UserModes` folder, create a new file named `MyUserMode.luau`.
+
+3. **Add the Simple Mode Script**:
+    - Open the `MyUserMode.luau` file in Visual Studio Code.
+    - Copy and paste the following Lua script as an example of a simple game mode:
+
+    ```lua
+    local GameMode = Moon.GameMode.First()
+    GameMode.AutomaticRespawn = true
+
+    local Players = {}
+
+    GameMode.OnLogin:Connect(function(Player)
+        print("Someone joined!")
+        table.insert(Players, Player)
+    end)
+
+    MS.Utility.SetTimer(function()
+        print("Ending the match after 20 seconds, everyone's a winner!")
+        GameMode:EndMatch(Players)
+    end, 20)
+
+    print("Our mode ran!")
+    ```
+
+    - This script sets up a basic game mode where all players are winners after 20 seconds.
+
+4. **Explore More Examples**:
+    - For more advanced examples, visit the [DCM Scripting Code Snippets](https://github.com/MidnightProtocol/DCM-Scripting/tree/main/Code-Snippets) on GitHub.
+
+-----
 
 
-The other half of the equation is the Tunable Configuration. You can set up custom tunables for your own script, just like the Snapshot VII DCMs have now. Parameters like health amount, number of rounds, game length, and scoring are all set up via a configurable JSON file that instructs the UI what to show. Whatever selections users make from those parameters are then passed on to the script. So each script can actually seed dozens of modes, all tuned with the parameters you define.
+## Testing your Mode
 
-## An Example
-The following is an excerpt from the Free For All mode in Snapshot VII. It sets up three loadouts, inserts them into a common table, and uses that table to grant each player one of the three loadouts on respawn, rotating through each in turn.
+### Single Player Testing
+(See also: [Multiplayer Testing](#multiplayer-testing))
 
-```-- Define the data for the three loadouts.
-local Loadouts = {}
+Follow these steps to test your script in a single-player environment:
 
-local LoadoutOne = {}
-local LoadoutTwo = {}
-local LoudoutThree = {}
+1. **Open Client and Choose a Test Map**:
+    - Launch the client and select a test map of your choice.
 
-table.insert(Loadouts, LoadoutOne)
-table.insert(Loadouts, LoadoutTwo)
-table.insert(Loadouts, LoudoutThree)
+2. **Connect the Debugger**:
+    - Ensure the debugger is set up and connected as per the earlier setup instructions.
 
-local Armor = { Helmet = "HeavyHelmet", Chest = "HeavyChestArmor"}
-local Grenades = {"FragGrenade", "SmokeGrenade"}
+3. **Select the Script for Restart**:
+    - In Visual Studio Code, choose the script you want to test.
 
-local AssaultRifle = {Weapon = "AssaultRifle", Parts={"BarrelIV", "GripIV", "StockIV", "BlueLaser", "3xReflex-1"}}
-local HeavyPistol = {Weapon = "HeavyPistol", Parts={"BarrelIV", "GripIV", "BlueLaser", "4xPTS-1"}}
-local SMG = {Weapon = "SMG", Parts={"BarrelIV", "GripIV", "StockIV", "BlueLaser"}}
-local DMR = {Weapon = "DMR", Parts={"BarrelIV", "GripIV", "StockIV", "4xPTS-1"}}
-local Sniper = {Weapon = "SniperRifle", Parts={"BarrelIV", "GripIV", "StockIV", "BlueLaser", "8xPTS-2"}}
-local PumpShotgun = {Weapon = "PumpShotgun", Parts={"BarrelIV", "GripIV", "StockIV", "BlueLaser"}}
+4. **Identify and Fix Issues**:
+    - If you encounter any issues, refer to the [Debugging In-Depth](#debugging-in-depth) section for guidance.
 
-LoadoutOne.PrimaryWeapon = AssaultRifle
-LoadoutOne.SecondaryWeapon = HeavyPistol
-LoadoutOne.Grenades = Grenades
-LoadoutOne.Armor = Armor
+5. **Edit and Restart the Script**:
+    - Make necessary changes to your script.
+    - Restart the script to apply your changes.
 
-LoadoutTwo.PrimaryWeapon = SMG
-LoadoutTwo.SecondaryWeapon = DMR
-LoadoutTwo.Grenades = Grenades
-LoadoutTwo.Armor = Armor
+6. **Verify the Script Functionality**:
+    - Observe the script in action and ensure it's working as expected.
 
-LoudoutThree.PrimaryWeapon = Sniper
-LoudoutThree.SecondaryWeapon = PumpShotgun
-LoudoutThree.Grenades = Grenades
-LoudoutThree.Armor = Armor
+For a visual walkthrough of these steps, watch our [YouTube Tutorial](https://www.youtube.com/watch?v=6l9bt5KYEhw).
 
--- Utility function to give the player a loadout.
-function AwardNextLoadout(Player, Loadout)
-	Player:GetEquipment():AddItem("LargeBackpack")
-	
-	Inventory.GrantWeapon(Player, Loadout.PrimaryWeapon, true, true)
-	Inventory.GrantWeapon(Player, Loadout.SecondaryWeapon, true, false)
-	
-	Player:GetEquipment():AddItem(Loadout.Armor.Helmet)
-	Player:GetEquipment():AddItem(Loadout.Armor.Chest)
+### Multiplayer Testing
+Details for multiplayer testing will be provided in future guides.
 
-	for i = 1, #Loadout.Grenades do
-		Player:GetEquipment():AddItem(Loadout.Grenades[i])
-	end
-end
+### Additional Resources
+- [Debugging In-Depth](#debugging-in-depth): A comprehensive guide to debugging your scripts.
 
--- Set up the hook on respawn to fill the player’s inventory.
-GameMode.OnRespawn:Connect(function(Player)
-	Player:GetBackpack():ClearInventory()
-	Player:GetEquipment():ClearInventory()
+-----
 
-	local LoadoutIndex = LoadOutTracker[Player] % #Loadouts + 1
-	AwardNextLoadout(Player, Loadouts[LoadoutIndex])
-	LoadOutTracker[Player] = LoadOutTracker[Player] + 1
-end)
-```
-All of the Lua scripts that run the DCMs in Snapshot VII are available to you to peruse.
+## Publishing Your Mode
 
-## What Can I Do Now?
-Get familiar with Lua. Look for online tutorials. There are even online IDEs and interpreters, so you can start learning and using the language in your browser.
-Look over the DEADROP Creator Mode source code. It’s all there for you to see. As you examine the code, you’ll start understanding how game modes are made, what is possible in script, and how it’s done.
-Plan your Creator Mode. Looking over the source code will get your creative juices flowing as you learn what tools are available to you. Write down your ideas, or if you’re ambitious, you can start to stitch together some Lua code.
-Look out for more. We’re working hard to get the information and tools in your hands as soon as we can!
+Once you've tested and finalized your game mode, you can publish it for others to use. Follow these steps:
+
+1. **Publish the Script**:
+    - Ensure your script is complete and functioning as intended.
+    - Publish your script following the standard procedure in your development environment.
+
+2. **Share the Refiner Code**:
+    - Upon publishing, you will receive a Refiner Code associated with your script.
+    - This code is a unique 9-digit identifier, formatted with dashes after every 3 numbers (e.g., `123-456-789`).
+    - Share this code with others so they can easily access your game mode.
+
+For a visual guide on how to publish and share your game mode, watch our [YouTube Tutorial](https://www.youtube.com/watch?v=EGW4c8_Q9gQ).
+
+-----
+## Some Extra Detail on Selected Topics
+
+### Example Modes and Modules
+- **Debugger Attachment**: When you attach your debugger to the Deadrop client, `ExampleModes` and `Modules` folders are automatically populated or refreshed.
+- **Reference and Usage**: The contents of these folders are for reference and use. Modes and modules provided may range from fully functional to works in progress.
+- **Modification Note**: Any changes made to these modes and modules will be ignored as they are part of the provided environment.
+
+### Port Forwarding & Local Multiplayer Testing
+- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#).
+
+### Matchmaking with a Refiner Code
+- **Publishing Modes**: Upon publishing a mode, a refiner key is generated.
+- **Player Requirements**: Published modes require a minimum player count (currently 4) to start. All players must be matched into the same refiner key.
+
+### MSLD Features
+- For a comprehensive understanding of the MSLD debugger, check out the [In-Depth MSLD Debugger Guide](#).
+
+### Map Names In The Launch.json
+- **Map Selection**: The map name in `launch.json` determines the map that loads when you restart or select a new script.
+- **Changing Maps**: To change the map, you must disconnect and reconnect your debugger.
+- **Valid Map Names** (as of version 7.5):
+    - `Canyon`
+    - `Proving Ground 2`
+    - `Proving Ground 3`
