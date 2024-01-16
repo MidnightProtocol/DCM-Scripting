@@ -4,7 +4,7 @@
 
 To get started with DEADROP's DCM Scripting, ensure you have the following requirements set up on your system:
 
-1. **Visual Studio Code**: This is the primary and required, if using the `MSLD`Extension, IDE used for development. Download and install it from [here](https://code.visualstudio.com/).
+1. **Visual Studio Code**: This is the primary and required IDE used for development due to our `MSLD Tool`. Download and install it from [here](https://code.visualstudio.com/).
 
 2. **Enable 'Allow Breakpoints Everywhere'**: 
     - Open Visual Studio Code.
@@ -171,7 +171,7 @@ For a visual guide on how to publish and share your game mode, watch our [YouTub
 
 ### Matchmaking with a Refiner Code
 - **Publishing Modes**: Upon publishing a mode, a refiner key is generated.
-- **Player Requirements**: Published modes require a minimum player count (currently 4) to start. All players must be matched into the same refiner key.
+- **Player Requirements**: Published modes require a minimum player count (currently 4) to start.
 
 ### MSLD Features
 - For a comprehensive understanding of the MSLD debugger, check out the [In-Depth MSLD Debugger Guide](#).
