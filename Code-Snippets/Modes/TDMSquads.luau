@@ -1,9 +1,9 @@
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Effects = require("Effects")
-local Tagging = require("Tagging")
-local TeamCreation = require("TeamCreation")
-local Audio = require("Audio")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Effects = require("Modules/Effects")
+local Tagging = require("Modules/Tagging")
+local TeamCreation = require("Modules/TeamCreation")
+local Audio = require("Modules/Audio")
 
 --Configure Game Mode
 local GameMode = Moon.GameMode.First()
@@ -50,9 +50,6 @@ LootRules.PickupRespawnTime = ScriptTuner:GetInt("Loot/PickupDelay", 1) * 60
 -- Team Settings
 local TeamSettings = Moon.Teams.Settings()
 TeamSettings.AutoCreateTeams = false
-
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
 		
 --Teams
 TeamCreation.GroupByMatchmakingTeam = true
@@ -102,7 +99,7 @@ local ScoreUISettings = Moon.ScoreUISettings.Get()
 function AssignWinners(Team)
 	Audio.PlayGlobalSound({Sound=Audio.Sound.LargeEnderOne})
 	GameMode:EndMatch(Team:GetTeamMembers())
-	ScoreUISettings.MatchDescription = Team:GetDisplayName() .. " Team Wins"
+	ScoreUISettings:SetMatchDescription(Team:GetDisplayName() .. " Team Wins")
 	Moon.HudController.Get():AddWidget("MatchStats")
 end
 
@@ -172,8 +169,8 @@ HudController:AddWidget("ScoreBug")
 HudController:AddWidget("TeamHealth")
 HudController:AddWidget("TeamIndicators")
 
-ScoreUISettings.MatchDescription = tostring(WinningKillCount) .. " kills to win"
-ScoreUISettings.MatchName = "Squad Death Match" 
+ScoreUISettings:SetMatchDescription(tostring(WinningKillCount) .. " kills to win")
+ScoreUISettings:SetMatchName("Squad Death Match") 
 ScoreUISettings.WinLimit = WinningKillCount
 ScoreUISettings.DisplayPlayerName = false
 ScoreUISettings.ShowTeamName = true

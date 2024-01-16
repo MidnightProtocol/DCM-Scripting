@@ -7,10 +7,10 @@ end
 
 type SoundRequestType = {
 	Sound: string, 
-	Attenuation: string, 
-	Location: table,
-	VolumeMultiplier: number,
-	PitchMultiplier: number}
+	Attenuation: string?, 
+	Location: {X: number, Y: number, Z: number}?,
+	VolumeMultiplier: number?,
+	PitchMultiplier: number?}
 
 local DefaultRequest = {
 	Sound = "Test",

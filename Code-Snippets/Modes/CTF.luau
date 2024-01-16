@@ -1,10 +1,10 @@
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Tagging = require("Tagging")
-local Audio = require("Audio")
-local Effects = require("Effects")
-local MidnightUtility = require("MidnightUtility")
-local TeamCreation = require("TeamCreation")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Tagging = require("Modules/Tagging")
+local Audio = require("Modules/Audio")
+local Effects = require("Modules/Effects")
+local MidnightUtility = require("Modules/MidnightUtility")
+local TeamCreation = require("Modules/TeamCreation")
 
 --Configure Game Mode
 local GameMode = Moon.GameMode.First()
@@ -176,7 +176,7 @@ local ScoreUISettings = Moon.ScoreUISettings.Get()
 
 function AssignWinners(Team)		
     Audio.PlayGlobalSound({Sound=Audio.Sound.LargeEnderOne, VolumeMultiplier=0.6})
-    ScoreUISettings.MatchDescription = Team:GetDisplayName() .. " Team Wins"
+    ScoreUISettings:SetMatchDescription(Team:GetDisplayName() .. " Team Wins")
     GameMode:EndMatch(Team:GetTeamMembers())
     Moon.HudController.Get():AddWidget("MatchStats")
 end
@@ -481,8 +481,6 @@ end
 
 GameMode.RespawnDelay = ScriptTuner:GetInt("Spawn/RespawnDelay", 5)
 GameMode.AutomaticRespawn = true
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
         
 --Spawning
 GameMode:AddPlayerStartFilter(function (Player, PlayerStarts)
@@ -582,8 +580,8 @@ HudController:AddWidget("TeamIndicators")
 HudController:AddWidget("ObjectiveIndicators")
 
 ScoreUISettings.StatName = CustomStatName
-ScoreUISettings.MatchDescription = "5 captures to win"
-ScoreUISettings.MatchName = "Capture The Flag" 
+ScoreUISettings:SetMatchDescription("5 captures to win")
+ScoreUISettings:SetMatchName("Capture The Flag") 
 ScoreUISettings.WinLimit = ScoreToWin
 ScoreUISettings.DisplayPlayerName = false
 ScoreUISettings.ShowTeamName = true
@@ -591,8 +589,8 @@ ScoreUISettings.ShowPlace = false
 ScoreUISettings.IsTeamMatch = true
 ScoreUISettings.ShowClock = true
 
-local Columns = ScoreUISettings.MatchStatColumns
+local Columns = ScoreUISettings:GetMatchStatColumns()
 table.insert(Columns, 1, CustomStatName)
-ScoreUISettings.MatchStatColumns = Columns
+ScoreUISettings:SetMatchStatColumns(Columns)
 --end stats
 

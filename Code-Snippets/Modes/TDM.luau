@@ -1,10 +1,10 @@
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Effects = require("Effects")
-local Tagging = require("Tagging")
-local MidnightUtility = require("MidnightUtility")
-local TeamCreation = require("TeamCreation")
-local Audio = require("Audio")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Effects = require("Modules/Effects")
+local Tagging = require("Modules/Tagging")
+local MidnightUtility = require("Modules/MidnightUtility")
+local TeamCreation = require("Modules/TeamCreation")
+local Audio = require("Modules/Audio")
 
 --Configure Game Mode
 --Configure Game Mode
@@ -52,8 +52,6 @@ local TeamSettings = Moon.Teams.Settings()
 TeamSettings.AutoCreateTeams = false
 TeamSettings.UseSquadColors = false
 
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
 		
 --Teams
 TeamCreation.AddTeam("Red", {R=0.846873, G=0.009721, B=0.048172, A=1.0})
@@ -281,9 +279,9 @@ HudController:AddWidget("TeamIndicators")
 HudController:AddWidget("ObjectiveIndicators")
 
 local ScoreUISettings = Moon.ScoreUISettings.Get()
-ScoreUISettings.MatchDescription = tostring(WinningKillCount) .. " kills to win" 
+ScoreUISettings:SetMatchDescription(tostring(WinningKillCount) .. " kills to win") 
 ScoreUISettings.WinLimit = WinningKillCount
-ScoreUISettings.MatchName = "Team Death Match"
+ScoreUISettings:SetMatchName("Team Death Match")
 ScoreUISettings.DisplayPlayerName = false
 ScoreUISettings.ShowTeamName = true
 ScoreUISettings.ShowPlace = false

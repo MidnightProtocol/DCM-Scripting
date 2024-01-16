@@ -1,42 +1,24 @@
 
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Tagging = require("Tagging")
-local MidnightUtility = require("MidnightUtility")
-local Outfits = require("Outfits")
-local Audio = require("Audio")
-local Effects = require("Effects")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Tagging = require("Modules/Tagging")
+local MidnightUtility = require("Modules/MidnightUtility")
+local Outfits = require("Modules/Outfits")
+local Audio = require("Modules/Audio")
 
 --Globals
---Configure Game Mode
 local GameMode = Moon.GameMode.First()
-local MatchSize = GameMode:MatchSize()
-LevelVariatonTag = nil
-
-if MatchSize <= 6 then
-    LevelVariatonTag = "Moon.LevelVariation.Small"
-elseif MatchSize <= 18 then
-    LevelVariatonTag = "Moon.LevelVariation.Medium"
-else
-    LevelVariatonTag = nil
-end
-
-if LevelVariatonTag ~= nil then
-    Moon.LevelVariation.LoadLevelVariation(LevelVariatonTag)
-end
-
 local ScriptTuner = Moon.ScriptTuner.GetOrMake()
 
 GameMode.RespawnDelay = ScriptTuner:GetInt("Spawn/RespawnDelay", 5)
 GameMode.AutomaticRespawn = true
 
 local LootRules = Moon.MatchLootRules.Get()
-LootRules.EnableLoot = ScriptTuner:GetBool("Loot/Enabled", true)
-LootRules.EnableDeathbags = ScriptTuner:GetBool("Loot/Deathbags", false)
-LootRules.DeathBagLifetime = ScriptTuner:GetInt("Loot/DeathbagLifetimes", 60)
-LootRules.RespawnLoot = ScriptTuner:GetBool("Loot/Respawn", true)
-LootRules.ContainerRespawnTime = ScriptTuner:GetInt("Loot/ContainerDelay", 3) * 60
-LootRules.PickupRespawnTime = ScriptTuner:GetInt("Loot/PickupDelay", 1) * 60
+
+LootRules.EnableLoot = true
+LootRules.ContainerRespawnTime = 3 * 60
+LootRules.PickupRespawnTime = 1 * 60
+LootRules.EnableDeathbags = false
 
 local Players = MidnightUtility.MidnightTable.New()
 
@@ -45,16 +27,13 @@ local TeamSettings = Moon.Teams.Settings()
 TeamSettings.AutoCreateTeams = false
 TeamSettings.UseSquadColors = false
 
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
-
 TeamJuggernaut = Moon.Teams.GetOrMakeTeam("Juggernaut")
 TeamNormal = Moon.Teams.GetOrMakeTeam("Normal")
 
 --Globals
 local CurrentJuggernaut = nil
 
-local ScoreToWin = ScriptTuner:GetInt("GameRules/ScoreLimit", 1500)
+local ScoreToWin = ScriptTuner:GetInt("GameRules/ScoreLimit", 1000)
 local PointsPerKill = ScriptTuner:GetInt("GameRules/PointsPerKill", 100)
 local ScoreStateName = "Juggernaut"
 
@@ -63,103 +42,25 @@ local TimeToNewJuggernaut = 5
 
 local CurrentJuggernuatObjective = nil
 
-local EnabledSlowZones = ScriptTuner:GetBool("GameRules/EnableSlowZones", true)
-local MaxSlowZones = 4
-
-RoundTime = ScriptTuner:GetInt("GameRules/TimeLimit", 20) * 60
-
 --Create an effect with additive modifiers
 Juggernaut = Moon.GameplayEffect.CreateEffect("Additive", 0)
 Juggernaut:SetMagnitude("MaxHealth", ScriptTuner:GetInt("Health/JuggernautHealth", 300))
 Juggernaut:SetMagnitude("Armor", ScriptTuner:GetInt("Health/JuggernautArmor", 60))
 Juggernaut:SetMagnitude("MoveSpeed", -ScriptTuner:GetInt("GameRules/JuggernautMovement", 100))
 
-SlowZoneEffect = Moon.GameplayEffect.CreateEffect("Additive", 0)
-SlowZoneEffect:SetMagnitude("MoveSpeed", -ScriptTuner:GetInt("GameRules/SlowZoneMovement", 150))
-
 --End Globals
 
 --Weapons
 local LMG = { 
 	Weapon="LMG", 
-	Parts={"BarrelIV", "GripIV", "StockIV", "2xHolo-1"}
+	Parts={"3xReflex-1", "WeaponChip", "ExtendedRifleClip"}
 }
 
 local MessageController = Moon.MessageController.Get();
 local GlobalObjectives = Moon.ObjectiveSettings.Get()
 
-local SlowZones = {}
-
-local MaxSpawnSize = 10
-local MinSpawnSize = 2
-
-local MinSpawnInterval = 10
-local MaxSpawnInterval = 45
-
-local CurrentJuggernautTimer = nil
-
-local PlayerSlowZoneTracker = MidnightUtility.MidnightTable.New()
-
-function SpawnSlowZone()
-	if CurrentJuggernaut ~= nil then
-		local CurrentScore = Moon.PlayerStats.GetCustomStatValue(CurrentJuggernaut, ScoreStateName)
-
-		local ScaleRatio = (ScoreToWin-CurrentScore)/ScoreToWin
-
-		local Size = MinSpawnSize + (ScaleRatio * (MaxSpawnSize - MinSpawnSize))
-
-		local TriggerScale = {X=Size, Y=Size, Z=2.5}
-		local TriggerRotation = {Yaw=60, Pitch=0, Roll=0}	
-		local Loc = CurrentJuggernaut:GetLocation()
-		Loc.Z = Loc.Z - 70
-		local Zone = Moon.Trigger.SpawnTrigger(Loc, TriggerScale, TriggerRotation)
-		Zone:SetColor({R=0,G=0.3,B=0,A=1})
-		table.insert(SlowZones, Zone)
-
-		Zone.OnPlayerOverlapBegin:Connect(function (Player)
-			if CurrentJuggernaut ~= nil and Player ~= nil and Player:GetName() ~= CurrentJuggernaut:GetName() then
-				if PlayerSlowZoneTracker[Player] == nil then
-					PlayerSlowZoneTracker[Player] = {Count=0,EffectHandle=nil}
-				end
-
-				PlayerSlowZoneTracker[Player].Count = PlayerSlowZoneTracker[Player].Count + 1
-
-				if PlayerSlowZoneTracker[Player].Count == 1 then
-					PlayerSlowZoneTracker[Player].EffectHandle = Moon.GameplayEffect.ApplyEffect(Player, SlowZoneEffect)
-				end
-			end
-		end)
-
-		Zone.OnPlayerOverlapEnd:Connect(function (Player)
-			if PlayerSlowZoneTracker[Player] ~= nil then
-				PlayerSlowZoneTracker[Player].Count = math.max(0, PlayerSlowZoneTracker[Player].Count - 1)
-				
-				if PlayerSlowZoneTracker[Player].Count == 0 then
-					Moon.GameplayEffect.RemoveEffect(Player, PlayerSlowZoneTracker[Player].EffectHandle)
-				end
-			end
-		end)
-
-		local NextTime = MinSpawnInterval + ((1-ScaleRatio) * (MaxSpawnInterval - MinSpawnInterval))
-
-		if CurrentJuggernautTimer ~= nil then
-			MS.Utility.ClearTimer(CurrentJuggernautTimer)
-		end
-		
-		CurrentJuggernautTimer = MS.Utility.SetTimer(SpawnSlowZone, NextTime, false)
-	end
-
-	if #SlowZones >= MaxSlowZones then
-		ToDestroy = table.remove(SlowZones, 1)
-		ToDestroy:Destroy()
-	end
-end
-
-function InitSpawnSlowZone()
-	SpawnSlowZone()
-end
-
 function SetJuggernaut(Player)
+
 	if CurrentJuggernuatObjective ~= nil then
 		GlobalObjectives:RemoveObjective(CurrentJuggernuatObjective)
 	end
@@ -168,43 +69,11 @@ function SetJuggernaut(Player)
 
 	CurrentJuggernaut = Player
 
-	if CurrentJuggernautTimer ~= nil then
-		MS.Utility.ClearTimer(CurrentJuggernautTimer)
-	end
-	
 	if SetJuggernautTimerHandle ~= nil then
 		MS.Utility.ClearTimer(SetJuggernautTimerHandle)
 	end
 
-	if PlayerSlowZoneTracker[Player] ~= nil and PlayerSlowZoneTracker[Player].Count > 0 then
-		PlayerSlowZoneTracker[Player].Count = 0
-		Moon.GameplayEffect.RemoveEffect(Player, PlayerSlowZoneTracker[Player].EffectHandle)
-	end
-
-	
-	local NormalTeam = TeamNormal:GetTeamMembers()
-
-	local IndexToRemove = 0
-	
-	for i = 1, #NormalTeam do
-		if NormalTeam[i]:GetName() == CurrentJuggernaut:GetName() then
-			IndexToRemove = i
-			break
-		end
-	end
-
-	if IndexToRemove > 0 then
-		table.remove(NormalTeam, IndexToRemove)
-	end
-
-	MessageController:SendMessage(NormalTeam, "New Enforcer In...", TimeToNewJuggernaut, true)
-
-	MessageController:SendMessage({CurrentJuggernaut}, "You Killed The Enforcer", 2)
-
-	MS.Utility.SetTimer(function()
-		MessageController:SendMessage({CurrentJuggernaut}, "You Are The Next Enforcer In...", TimeToNewJuggernaut - 1, true)
-	end, TimeToNewJuggernaut - 3)
-
+	MessageController:SendMessageToAll("New Juggernaut in...", TimeToNewJuggernaut, true)
 
 	SetJuggernautTimerHandle = MS.Utility.SetTimer(function ()
 		Player:GetBackpack():ClearInventory()
@@ -231,29 +100,22 @@ function SetJuggernaut(Player)
 
 		Player:AddTag("Interaction.Block.Loot")
 		Player:AddTag("Interaction.Block.Lifelink")
-		Effects.RemoveHealthRegen(Player)
-
-		if EnabledSlowZones == true then
-			InitSpawnSlowZone()
-		end
-
+		
 	end, TimeToNewJuggernaut)
 end
 
 --Weapons
-local SMG = { 
-	Weapon="SMG", 
-	Parts={"3xReflex-1", "BarrelIV", "GripIV", "StockIV"}
+local AssaultRifle = { 
+	Weapon="AssaultRifle", 
+	Parts={"3xReflex-1", "ExtendedRifleClip"}
 }
 
 function InitPlayer(Player)
 	Player:GetBackpack():ClearInventory()
 	Player:GetEquipment():ClearInventory()
 
-	Inventory.GrantWeapon(Player, SMG, true, true)
+	Inventory.GrantWeapon(Player, AssaultRifle, true, true)
 	Player:GetEquipment():AddItem("Thruster")
-
-	Effects.AddHealthRegen(Player)
 
 	Player:RemoveTag("Interaction.Block.Loot")
 	Player:RemoveTag("Interaction.Block.Lifelink")
@@ -312,11 +174,6 @@ GameMode.OnRespawn:Connect(function (Player)
 		TeamNormal:AddPlayer(Player)
 		InitPlayer(Player)
 	end
-
-	if PlayerSlowZoneTracker[Player] ~= nil and PlayerSlowZoneTracker[Player].Count > 0 then
-		PlayerSlowZoneTracker[Player].Count = 0
-	end
-
 end)
 
 GameMode.ShouldRespawn:Connect(function (Player)
@@ -339,23 +196,6 @@ GameMode:AddPlayerStartFilter(function (Player, PlayerStarts)
 	end
 end)
 
-GameMode:SetMatchClock(RoundTime)
-MS.Utility.SetTimer(function ()
-	local WinningPlayer = nil
-	local WinningScore = -1
-
-	for i = 1, #Players do
-		local PlayerScore = Moon.PlayerStats.GetCustomStatValue(Players[i], ScoreStateName)
-		if PlayerScore > WinningScore then
-			WinningScore = PlayerScore
-			WinningPlayer = Players[i]
-		end
-	end
-	
-	GameMode:EndMatch({WinningPlayer})
-	Moon.HudController.Get():AddWidget("MatchStats")
-end, RoundTime)
-
 Moon.PlayerStats.SetDamageTrackingDuration(15)
 
 local HudController = Moon.HudController.Get()
@@ -367,9 +207,10 @@ ScoreUISettings.StatName = ScoreStateName
 ScoreUISettings.MatchDescription = tostring(ScoreToWin) .. " points to win"
 ScoreUISettings.MatchName = "Enforcer" 
 ScoreUISettings.WinLimit = ScoreToWin
-ScoreUISettings.DisplayPlayerName = true
+ScoreUISettings.DisplayPlayerName = false
 ScoreUISettings.ShowPlace = true
-ScoreUISettings.ShowClock = true
+ScoreUISettings.IsTeamMatch = false
+ScoreUISettings.ShowTeamName = true
 
 local Columns = ScoreUISettings.MatchStatColumns
 table.insert(Columns, 1, ScoreStateName)

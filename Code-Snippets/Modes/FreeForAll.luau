@@ -1,11 +1,11 @@
-local Math = require("Math")
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Tagging = require("Tagging")
-local Effects = require("Effects")
-local MidnightUtility = require("MidnightUtility")
-local Outfits = require("Outfits")
-local Audio = require("Audio")
+local Math = require("Modules/Math")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Tagging = require("Modules/Tagging")
+local Effects = require("Modules/Effects")
+local MidnightUtility = require("Modules/MidnightUtility")
+local Outfits = require("Modules/Outfits")
+local Audio = require("Modules/Audio")
 
 local ScriptTuner = Moon.ScriptTuner.GetOrMake()
 
@@ -88,9 +88,6 @@ LoudoutThree.Armor = Armor
 KingPlayer = nil
 --End Globals
 
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
-
 --Respans
 GameMode.RespawnDelay = ScriptTuner:GetInt("Spawn/RespawnDelay", 5)
 GameMode.AutomaticRespawn = true
@@ -158,7 +155,7 @@ GameMode.OnLogin:Connect(function (Player)
 	local NewTargetScore = math.max(WinningKillCountMinimum, NumOfPlayers) + NumberOfPlayersBots
 
 	ScoreUISettings.WinLimit = NewTargetScore
-	ScoreUISettings.MatchDescription = tostring(NewTargetScore) .. " kills to win"
+	ScoreUISettings:SetMatchDescription(tostring(NewTargetScore) .. " kills to win")
 	WinningKillCount = NewTargetScore
 
 	Player.OnKill:Connect(function(Victim)
@@ -254,7 +251,7 @@ local HudController = Moon.HudController.Get()
 HudController:AddWidget("ScoreBug")
 HudController:AddWidget("ObjectiveIndicators")
 
-ScoreUISettings.MatchName = "Free For All"
+ScoreUISettings:SetMatchName("Free For All")
 ScoreUISettings.DisplayPlayerName = true
 ScoreUISettings.ShowPlace = false
 ScoreUISettings.ShowClock = true

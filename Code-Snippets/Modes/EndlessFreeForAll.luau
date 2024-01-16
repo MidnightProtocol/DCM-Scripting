@@ -1,7 +1,7 @@
-local Math = require("Math")
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Tagging = require("Tagging")
+local Math = require("Modules/Math")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Tagging = require("Modules/Tagging")
 
 --Configure Game Mode
 local GameMode = Moon.PreGameMode.First()
@@ -55,8 +55,6 @@ LootRules.RespawnLoot = true
 LootRules.ContainerRespawnTime = 2 * 60
 LootRules.PickupRespawnTime = 1 * 60
 
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
 
 GameMode.ShouldRespawn:Connect(function (Player)
 	return true

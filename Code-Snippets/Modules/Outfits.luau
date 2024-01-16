@@ -1,4 +1,4 @@
-MidnightUtility = require("MidnightUtility")
+MidnightUtility = require("Modules/MidnightUtility")
 
 local Module = {}
 

@@ -1,5 +1,5 @@
-local Inventory = require("Inventory")
-local MidnightUtility = require("MidnightUtility")
+local Inventory = require("Modules/Inventory")
+local MidnightUtility = require("Modules/MidnightUtility")
 
 -- Tables store multiple values in one variable
 local Module = {}

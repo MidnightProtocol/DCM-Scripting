@@ -1,5 +1,5 @@
 local Module = {}
-local Math = require("Math")
+local Math = require("Modules/Math")
 
 MS.Utility.Log("Loading SpawnFilters.luau!")
 

@@ -1,7 +1,7 @@
-local Math = require("Math")
-local Inventory = require("Inventory")
-local SpawnFilters = require("SpawnFilters")
-local Tagging = require("Tagging")
+local Math = require("Modules/Math")
+local Inventory = require("Modules/Inventory")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Tagging = require("Modules/Tagging")
 
 ------Globals----------
 
@@ -22,7 +22,6 @@ local LootRules = Moon.MatchLootRules.Get()
 LootRules.EnableLoot = false
 LootRules.EnableDeathbags = false
 
-
 GameMode.OnLogin:Connect(function (Player)
 	Player.OnKill:Connect(function(Victim)
 
@@ -33,9 +32,6 @@ GameMode.OnLogin:Connect(function (Player)
 	end)
 end)
 
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
-
 GameMode.ShouldRespawn:Connect(function (Player)
 	return true
 end)
@@ -44,13 +40,8 @@ GameMode.GetPawnClass:Connect(function(Player)
 	return "Default"
 end)
 
-local Sniper = { 
-	Weapon="SniperRifle", 
-	Parts={"SniperRifleBarrel_B", "SniperRifleChip_B", "SniperRifleGrip_B", "SniperRifleStock_B", "8xPTS-2"}
-}
-
-local DeepFreezeShotgun = { 
-	Weapon="DeepFreezeShotgun", 
+local Knife = { 
+	Weapon="Knife", 
 	Parts={}
 }
 
@@ -63,8 +54,7 @@ GameMode.OnRespawn:Connect(function(Player)
 	local Equipment = Player:GetEquipment()
 	local Backpack = Player:GetBackpack()
 	
-	Inventory.GrantWeapon(Player, Sniper, true, true)
-	Inventory.GrantWeapon(Player, DeepFreezeShotgun, true, false)
+	Inventory.GrantWeapon(Player, Knife, true, true)
 	
 	MS.Utility.Log("OnRespawn: Finish")
 end)
@@ -87,10 +77,10 @@ local HudController = Moon.HudController.Get()
 HudController:AddWidget("ScoreBug")
 
 local ScoreUISettings = Moon.ScoreUISettings.Get()
-ScoreUISettings.MatchDescription = tostring(WinningKillCount) .. " kills to win"
-ScoreUISettings.MatchName = "Shotty Snipers" 
+ScoreUISettings.MatchDescription = tostring(WinningKillCount) .. " kills to win" 
 ScoreUISettings.WinLimit = WinningKillCount
+ScoreUISettings.MatchName = "Knife Fight"
 ScoreUISettings.DisplayPlayerName = true
 ScoreUISettings.ShowPlace = false
 
-MS.Utility.Log("FreeForAllSnipers.luau Finished")
+MS.Utility.Log("FreeForAllKnives.luau Finished")

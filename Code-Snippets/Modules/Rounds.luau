@@ -87,7 +87,7 @@ function NewRound()
 	print("Round Started")
 	CurrentRoundState = Module.RoundState.MidRound
 	CurrentRound = CurrentRound + 1
-	ScoreUISettings.RoundName = "Round " .. tostring(CurrentRound)
+	ScoreUISettings:SetRoundName("Round " .. tostring(CurrentRound))
 	if NewRoundCallback ~= nil then
 		NewRoundCallback()
 	end

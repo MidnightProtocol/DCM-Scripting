@@ -1,11 +1,11 @@
-local Inventory = require("Inventory")
-local GunCycle = require("GunGame_WeaponCycles")
-local SpawnFilters = require("SpawnFilters")
-local Tagging = require("Tagging")
-local Outfits = require("Outfits")
-local MidnightUtility = require("MidnightUtility")
-local Audio = require("Audio")
-local Effects = require("Effects")
+local Inventory = require("Modules/Inventory")
+local GunCycle = require("Modules/GunGame_WeaponCycles")
+local SpawnFilters = require("Modules/SpawnFilters")
+local Tagging = require("Modules/Tagging")
+local Outfits = require("Modules/Outfits")
+local MidnightUtility = require("Modules/MidnightUtility")
+local Audio = require("Modules/Audio")
+local Effects = require("Modules/Effects")
 
 --Globals
 
@@ -122,9 +122,6 @@ GameMode.OnLogin:Connect(function (Player)
 	end
 end)
 
-GameMode:SetInventoryImportEnabled(false)
-GameMode:SetInventoryExportEnabled(false)
-
 GameMode.ShouldRespawn:Connect(function (Player)
 	return true
 end)
@@ -213,8 +210,8 @@ HudController:AddWidget("ScoreBug")
 
 local ScoreUISettings = Moon.ScoreUISettings.Get()
 ScoreUISettings.StatName = CustomStatName
-ScoreUISettings.MatchDescription = "Get a kill with each weapon"
-ScoreUISettings.MatchName = "Arsenal" 
+ScoreUISettings:SetMatchDescription("Get a kill with each weapon")
+ScoreUISettings:SetMatchName("Arsenal") 
 ScoreUISettings.WinLimit = table.getn(WeaponCycle)
 ScoreUISettings.DisplayPlayerName = true
 ScoreUISettings.ShowPlace = false

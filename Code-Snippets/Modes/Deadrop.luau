@@ -1,7 +1,7 @@
-local RisingHazard = require("RisingHazard")
-local ExtractionManager = require("ExtractionManager")
-local Inventory = require("Inventory")
-local Math = require("Math")
+local RisingHazard = require("Modules/RisingHazard")
+local ExtractionManager = require("Modules/ExtractionManager")
+local Inventory = require("Modules/Inventory")
+local Math = require("Modules/Math")
 
 --Globals
 local OnFirstPlayerJoin = function ()
@@ -47,10 +47,6 @@ GameMode.OnLogin:Connect(function (Player)
 	end);
 end)
 
-GameMode.OnMatchAllocated:Connect(function ()
-		GameMode:SetInventoryImportEnabled(true)
-		GameMode:SetInventoryExportEnabled(true)
-end)
 
 GameMode.ShouldRespawn:Connect(function (Player)
 	local Name = Player:GetName()
@@ -106,7 +102,7 @@ GameMode.OnPlayerMatchEvent:Connect(function(Player, Event)
 		if ValidInGamePlayers == 1 then
 			local Players = Moon.Player.All()
 			for i = 1, #Players do
-				if Players[i].MatchState == 0 then
+				if Players[i].MatchState == EExtractionResult.None then
 				
 					local Rewards = Players[i]:GetRewardsContainer()
 					
