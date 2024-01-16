@@ -174,7 +174,7 @@ For a visual guide on how to publish and share your game mode, watch our [YouTub
 - **Player Requirements**: Published modes require a minimum player count (currently 4) to start.
 
 ### MSLD Features
-- For a comprehensive understanding of the MSLD debugger, check out the [In-Depth MSLD Debugger Guide](#).
+- For a comprehensive understanding of the MSLD debugger, check out the [In-Depth MSLD Debugger Guide](#). <sub>[COMING SOON] </sub>
 
 ### Map Names In The Launch.json
 - **Map Selection**: The map name in `launch.json` determines the map that loads when you restart or select a new script.
