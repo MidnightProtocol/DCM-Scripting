@@ -18,6 +18,9 @@ To get started with DEADROP's DCM Scripting, ensure you have the following requi
 4. **Midnight Society Luau Debugger (MSLD) Extension**: 
     - Required for debugging DCM Luau scripts in Visual Studio Code.
     - Install it directly [here](https://midnightsociety-public.s3.us-west-2.amazonaws.com/DCM/tools/midnightsocietyluadebugger-0.0.3.vsix) or from the Visual Studio Marketplace: [Midnight Luau Debugger](#).
+
+5. **Documentation**: 
+    - You can find our full documentation [here](https://docs.midnightsociety.com).    
 -----
 ## Creating Your First Project
 
@@ -136,7 +139,25 @@ Follow these steps to test your script in a single-player environment:
 For a visual walkthrough of these steps, watch our [YouTube Tutorial](https://www.youtube.com/watch?v=6l9bt5KYEhw).
 
 ### Multiplayer Testing
-Details for multiplayer testing will be provided in future guides.
+Sometimes a mode can be tested alone, but often it’s impractical or impossible to thoroughly test a mode with only one player. The test mode described in {here, link} can also be used to allow friends to join your local mode while you are developing and debugging it. It does require some additional one-time network setup.
+
+## One-Time Setup
+
+1. **Setup Port Forwarding For Local Multiplayer Testing**:
+    - If you want or need to test with more than one player who is not on your home network you will need to open port 7777 in your network and forward it to your development PC. Every router is somewhat different so it is not possible for us to give you exact directions on this step, but https://nordvpn.com/blog/open-ports-on-router/ may serve as a starting point. Future releases will resolve this issue without the need to open ports.
+    - Some Routers and/or internet providers require using an app to forward ports. Such as xfinity: https://www.xfinity.com/support/articles/port-forwarding-xfinity-wireless-gateway
+
+## Multiplayer Testing
+
+1. Find your public ip address to share with your friend
+
+2. Visit a site like https://www.showmyip.com/ and make note of your ipv4 address
+
+3. Open Client And Run Test Map of choosing
+
+4. Wait for your friend to connect
+    - Test as normal now with your friends who have joined.
+Players should stay connected to your map through restarts and new script selections. The only time they will disconnect is if they return to home either through a match ending or through their menu.
 
 ### Additional Resources
 - [Debugging In-Depth](#debugging-in-depth): A comprehensive guide to debugging your scripts. <sub>`[COMING SOON]`</sub>
