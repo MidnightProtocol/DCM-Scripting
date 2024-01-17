@@ -113,7 +113,7 @@ Creating a basic game mode in DEADROP's DCM Scripting involves a few simple step
 ## Testing your Mode
 
 ### Single Player Testing
-(See also: [Multiplayer Testing](#multiplayer-testing))  <sub>`[COMING SOON]` </sub>
+(See also: [Multiplayer Testing](#Testing-with-Multiple-Players))  <sub>`[COMING SOON]` </sub>
 
 Follow these steps to test your script in a single-player environment:
 
