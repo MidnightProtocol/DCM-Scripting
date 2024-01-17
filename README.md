@@ -102,7 +102,7 @@ Creating a basic game mode in DEADROP's DCM Scripting involves a few simple step
     - This script sets up a basic game mode where all players are winners after 20 seconds.
 
 4. **Explore More Examples**:
-    - For more advanced examples, visit the [DCM Scripting Code Snippets](https://github.com/MidnightProtocol/DCM-Scripting/tree/main/Code-Snippets) <sub>[FUTURE RELEASE] </sub>
+    - For more advanced examples, visit the [DCM Scripting Code Snippets](https://github.com/MidnightProtocol/DCM-Scripting/tree/main/Code-Snippets) <sub>`[COMING SOON]` </sub>
 
 -----
 
@@ -167,7 +167,7 @@ For a visual guide on how to publish and share your game mode, watch our [YouTub
 - **Modification Note**: Any changes made to these modes and modules will be ignored as they are part of the provided environment.
 
 ### Port Forwarding & Local Multiplayer Testing
-- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#) <sub>`[COMING SOON]`</sub>.
+- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#). <sub>`[COMING SOON]`</sub>
 
 ### Matchmaking with a Refiner Code
 - **Publishing Modes**: Upon publishing a mode, a refiner key is generated.
