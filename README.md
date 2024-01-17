@@ -20,7 +20,7 @@ To get started with DEADROP's DCM Scripting, ensure you have the following requi
     - Install it directly [here](https://midnightsociety-public.s3.us-west-2.amazonaws.com/DCM/tools/midnightsocietyluadebugger-0.0.3.vsix) or from the Visual Studio Marketplace: [Midnight Luau Debugger](#).
 
 5. **Documentation**: 
-    - You can find our full documentation [here](#).    
+    - You can find our full documentation [here](http://docs.midnightsociety.com/).    
 -----
 ## Creating Your First Project
 
