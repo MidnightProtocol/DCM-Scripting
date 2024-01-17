@@ -139,7 +139,7 @@ Follow these steps to test your script in a single-player environment:
 For a visual walkthrough of these steps, watch our [YouTube Tutorial](https://www.youtube.com/watch?v=6l9bt5KYEhw).
 
 ### Testing with Multiple Players
-Sometimes a mode can be tested alone, but often it’s impractical or impossible to thoroughly test a mode with only one player. The test mode described in {here, link} can also be used to allow friends to join your local mode while you are developing and debugging it. It does require some additional one-time network setup.
+Sometimes a mode can be tested alone, but often it’s impractical or impossible to thoroughly test a mode with only one player. The test mode described in (<sub>`[COMING SOON]`</sub>) can also be used to allow friends to join your local mode while you are developing and debugging it. It does require some additional one-time network setup.
 
 #### One-Time Setup
 
