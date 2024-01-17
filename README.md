@@ -110,7 +110,7 @@ Creating a basic game mode in DEADROP's DCM Scripting involves a few simple step
 ## Testing your Mode
 
 ### Single Player Testing
-(See also: [Multiplayer Testing](#multiplayer-testing))  <sub>[COMING SOON] </sub>
+(See also: [Multiplayer Testing](#multiplayer-testing))  <sub>`[COMING SOON]` </sub>
 
 Follow these steps to test your script in a single-player environment:
 
@@ -124,7 +124,7 @@ Follow these steps to test your script in a single-player environment:
     - In Visual Studio Code, choose the script you want to test.
 
 4. **Identify and Fix Issues**:
-    - If you encounter any issues, refer to the [Debugging In-Depth](#debugging-in-depth)  section for guidance. <sub>[COMING SOON] </sub>
+    - If you encounter any issues, refer to the [Debugging In-Depth](#debugging-in-depth)  section for guidance. <sub>`[COMING SOON]`</sub>
 
 5. **Edit and Restart the Script**:
     - Make necessary changes to your script.
@@ -139,7 +139,7 @@ For a visual walkthrough of these steps, watch our [YouTube Tutorial](https://ww
 Details for multiplayer testing will be provided in future guides.
 
 ### Additional Resources
-- [Debugging In-Depth](#debugging-in-depth): A comprehensive guide to debugging your scripts. <sub>[COMING SOON] </sub>
+- [Debugging In-Depth](#debugging-in-depth): A comprehensive guide to debugging your scripts. <sub>`[COMING SOON]`</sub>
 
 -----
 
