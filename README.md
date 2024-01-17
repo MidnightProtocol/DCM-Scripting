@@ -167,14 +167,14 @@ For a visual guide on how to publish and share your game mode, watch our [YouTub
 - **Modification Note**: Any changes made to these modes and modules will be ignored as they are part of the provided environment.
 
 ### Port Forwarding & Local Multiplayer Testing
-- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#) <sub>[COMING SOON] </sub>.
+- To test your modes locally with multiple players, refer to our [Advanced Topic Guide](#) <sub>`[COMING SOON]`</sub>.
 
 ### Matchmaking with a Refiner Code
 - **Publishing Modes**: Upon publishing a mode, a refiner key is generated.
 - **Player Requirements**: Published modes require a minimum player count (currently 4) to start.
 
 ### MSLD Features
-- For a comprehensive understanding of the MSLD debugger, check out the [In-Depth MSLD Debugger Guide](#). <sub>[COMING SOON] </sub>
+- For a comprehensive understanding of the MSLD debugger, check out the [In-Depth MSLD Debugger Guide](#). <sub>`[COMING SOON]`</sub>
 
 ### Map Names In The Launch.json
 - **Map Selection**: The map name in `launch.json` determines the map that loads when you restart or select a new script.
